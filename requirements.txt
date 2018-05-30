@@ -1,0 +1,4 @@
+googleapiclient==1.6.6
+httplib2==0.11.3
+oauth2client==4.1.2
+pandas==0.22.0
