@@ -7,12 +7,10 @@ Created on Mon Jun 12 17:01:39 2017
 """
 from os.path import expanduser
 from googleapiclient import discovery
-from googleapiclient.http import MediaIoBaseDownload
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 import pandas as pd
-import io
 
 
 class Sheets(object):
