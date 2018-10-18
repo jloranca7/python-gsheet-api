@@ -20,7 +20,7 @@ class Sheets(object):
 
     def start(self):
         """
-        :return: Initialize G-Sheet authorization using client secret file
+        Initializes G-Sheet authorization using client secret file
         """
         creds = self.store.get()
         if not creds or creds.invalid:
@@ -32,7 +32,7 @@ class Sheets(object):
 
     def append(self, data, sheet_id, target='A2'):
         """
-        Appends Pandas dataframe to G-Sheet beginning at target location
+        Appends Pandas DataFrame to G-Sheet beginning at target location
         """
         sheet = self.start()
         update = data.values.tolist()
@@ -42,7 +42,7 @@ class Sheets(object):
 
     def read(self, sheet_id, read, col=None):
         """
-        :return: Returns Pandas dataframe from existing G-Sheet
+        Returns Pandas DataFrame from existing G-Sheet
         """
         sheet = self.start()
         read_result = sheet.spreadsheets().values().get(spreadsheetId=sheet_id, range=read).execute()
@@ -137,7 +137,7 @@ class Sheets(object):
 
     def delete(self, sheet_id, id='682809531', srow=1, erow=2):
         """
-        Delet specific rows from G-Sheet
+        Delete specific rows from G-Sheet
         """
         sheet = self.start()
         delete = {
@@ -158,7 +158,7 @@ class Drive(object):
 
     def start(self):
         """
-        :return: Initialize G-Drive authorization using client secret file
+        Initializes G-Drive authorization using client secret file
         """
         creds = self.store.get()
         if not creds or creds.invalid:
@@ -168,12 +168,18 @@ class Drive(object):
         return drive
 
     def download(self, file_id, filename, form='pdf'):
+        """
+        Downloads file from G-Drive
+        """
         drive = self.start
         request = drive().files().export(fileId=file_id, mimeType='application/{}'.format(form)).execute()
         with open(filename, 'wb') as fh:
             fh.write(request)
 
     def upload(self, filename, form='pdf', folder=None):
+        """
+        Uploads file to G-Drive
+        """
         drive = self.start
         metadata = {'name': filename, 'mimeType': 'application/{}'.format(form), 'parents': [folder]}
         result = drive().files().create(body=metadata, media_body=filename,
