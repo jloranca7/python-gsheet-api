@@ -31,6 +31,9 @@ class Sheets(object):
         return sheets
 
     def append(self, data, sheet_id, target='A2'):
+        """
+        Appends Pandas dataframe to G-Sheet beginning at target location
+        """
         sheet = self.start()
         update = data.values.tolist()
         values = {'values': [row for row in update]}
@@ -38,6 +41,9 @@ class Sheets(object):
                                              valueInputOption='USER_ENTERED').execute()
 
     def read(self, sheet_id, read, col=None):
+        """
+        :return: Returns Pandas dataframe from existing G-Sheet
+        """
         sheet = self.start()
         read_result = sheet.spreadsheets().values().get(spreadsheetId=sheet_id, range=read).execute()
         df = pd.DataFrame(read_result['values'])
@@ -46,6 +52,9 @@ class Sheets(object):
         return df
 
     def update(self, data, sheet_id, target='A2'):
+        """
+        Updates existing cells in G-sheet from pandas dataframe
+        """
         sheet = self.start()
         update = data.values.tolist()
         values = {'values': [row for row in update]}
@@ -53,10 +62,16 @@ class Sheets(object):
                                              valueInputOption='USER_ENTERED').execute()
 
     def clear(self, sheet_id, target):
+        """
+        Clears all data from target range in G-Sheet
+        """
         sheet = self.start()
         sheet.spreadsheets().values().clear(spreadsheetId=sheet_id, range=target, body={}).execute()
 
     def bold(self, sheet_id, srow=0, erow=1, scol=0, ecol=1, bold=True):
+        """
+        Bold cell or groups of cells
+        """
         bolds = {'requests': [
             {'repeatCell': {
                 'range': {'startRowIndex': srow,
@@ -71,6 +86,9 @@ class Sheets(object):
         sheet.spreadsheets().batchUpdate(spreadsheetId=sheet_id, body=bolds).execute()
 
     def borders(self, sheet_id, id='682809531', srow=1, erow=2, scol=1, ecol=2, style='SOLID_MEDIUM', inner='NONE'):
+        """
+        Add borders to cells or groups of cells
+        """
         body = {'requests': [{
                     "updateBorders": {
                       "range": {
@@ -102,6 +120,9 @@ class Sheets(object):
         sheet.spreadsheets().batchUpdate(spreadsheetId=sheet_id, body=borders).execute()
 
     def insert(self, rows, sheet_id, target):
+        """
+        Insert new rows into G-Sheet
+        """
         sheet = self.start()
         l = []
         r = ['', '']
@@ -115,6 +136,9 @@ class Sheets(object):
                                              insertDataOption='INSERT_ROWS').execute()
 
     def delete(self, sheet_id, id='682809531', srow=1, erow=2):
+        """
+        Delet specific rows from G-Sheet
+        """
         sheet = self.start()
         delete = {
             "requests": [{
